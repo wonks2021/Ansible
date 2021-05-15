@@ -1,0 +1,12 @@
+---
+- name: allowing ports
+  hosts: jenkins
+  vars_files: 
+    - /home/ubuntu/roles/motd/github/defaults/main.yml 
+  tasks:
+    - name: git
+      git:
+       repo: {{ github_url }}
+       dest: /home/ubuntu/git
+       archive: git.zip
+    

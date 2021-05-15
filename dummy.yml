@@ -1,0 +1,19 @@
+---
+- name: Install and start nginx
+  hosts: jenkins
+  tasks:
+   - name: httpd package is present
+     apt:
+      name: nginx
+      state: present
+
+   - name: file creation
+     copy:
+        content: 'hello world'
+        dest: /var/www/html/index.html
+       
+   - name: nginx is started
+     service:
+        name: nginx
+        state: started
+        enabled: true

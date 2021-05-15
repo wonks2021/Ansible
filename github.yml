@@ -1,0 +1,11 @@
+
+---
+- name: allowing ports
+  hosts: jenkins
+  tasks:
+    - name: git
+      git:
+       repo: 'https://github.com/Omkar219/git_cheatsheet-101.git'
+       dest: /home/ubuntu/git
+       archive: git.zip
+    

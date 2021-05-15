@@ -1,0 +1,20 @@
+---
+- hosts: jenkins
+  vars:
+     package1: "apache2"
+     package2: "wget"
+
+  tasks:
+    - name: installing pckg
+      apt: 
+        name: apache2 
+        state: present 
+        update_cache: yes
+
+    - name: install wget
+      apt: 
+        pkg: "{{ package2 }}" 
+        state: present
+        update_cache: yes
+           
+

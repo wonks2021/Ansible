@@ -1,0 +1,61 @@
+---
+- name: manage
+  hosts: jenkins
+  vars:
+   user: ubuntu
+  tasks:
+   - name: Touch a file and set permissions
+     file:
+      path: /home/{{ user }}/testfile 
+      owner: ubuntu
+      group: ubuntu
+      mode: 0640
+      state: touch
+     become: true
+
+   - name: Retrieve SSH key from reference host
+     fetch:
+      src: "/home/{{ user }}/.ssh/id_rsa.pub"
+      dest: "files/keys/{{ user }}.pub"
+     become: true
+
+   - name: Add a line of text to a file
+     lineinfile:
+      path: /home/ubuntu/testfile
+      line: 'Add this line to the file'
+      state: present
+
+   - name: Add additional lines to a file
+     blockinfile:
+      path: /home/ubuntu/testfile
+      block: |
+       First line in the additional block of text
+       Second line in the additional block of text
+      state: present
+
+   - name: stat /etc/passwd
+     stat:
+      path: /etc/passwd
+     register: results
+
+   - name: Display stat results
+     debug:
+      var: results
+    
+   - name: Copy a file to managed hosts and set attributes
+     copy:
+      src: /home/ubuntu/files/users.txt
+      dest: /home/ubuntu/user.txt
+      owner: ubuntu
+      group: ubuntu
+      mode: u+rw,g-wx,o-rwx
+
+   - name: adding a file from host
+     file:
+      path: /home/ubuntu/user.txt
+      state: touch
+
+   - name: Remove a file from managed hosts
+     file:
+      path: /home/ubuntu/user.txt
+      state: absent 

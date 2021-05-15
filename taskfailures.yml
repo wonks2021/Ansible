@@ -1,0 +1,27 @@
+---
+- name: allowing ports
+  hosts: jenkins
+  tasks:
+    - name: allow ports
+      ufw:
+       state: enabled
+       policy: allow
+
+    - name: allow tcp
+      ufw:
+       rule: allow
+       port: '80'
+       proto: tcp
+
+    - name: error
+      apt:
+       name: dhanush
+       state: present
+      ignore_errors: yes
+      register: cmd_result
+
+    - name: failed_when
+      fail: 
+       msg: " package is not found " 
+      when: " 'No package matching' in cmd_result.stdout "    
+     

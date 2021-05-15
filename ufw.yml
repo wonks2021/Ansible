@@ -1,0 +1,34 @@
+---
+- name: allowing ports
+  hosts: jenkins
+  tasks:
+    - name: allow ports
+      ufw:
+       state: enabled
+       policy: allow
+  
+    - name: allow tcp
+      ufw:
+       rule: allow
+       port: '80'
+       proto: tcp
+
+    - name:
+      uri:
+       url: "{{ item.name }}"
+       return_content: yes
+      with_items: 
+        - {name: http://www.google.com}
+        - {name: http://www.facebook.com}
+        - {name: http://172.31.1.184}
+   
+    - name: creating user
+      user:
+       name: "{{ item.name }}"
+       uid: "{{ item.uid }}"
+       state: present
+      with_items:
+        - { name: 'a', uid: '3003'}
+        - { name: 'b', uid: '3001'}
+        - { name: 'c', uid: '3002'}
+        - { name: 'd', uid: '3000'}

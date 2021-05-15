@@ -1,0 +1,11 @@
+---
+- name: Nginx service
+  hosts: jenkins
+  tasks:
+   - name: restart nginx
+     shell: systemctl status nginx 
+     register: task
+     until: task.stdout.find("inactive (dead)")==1
+     retries: 5
+     delay: 5
+      

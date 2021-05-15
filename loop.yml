@@ -1,0 +1,26 @@
+---
+- name: allowing ports
+  hosts: jenkins
+  tasks:
+    - name: allow ports
+      ufw:
+       state: enabled
+       policy: allow
+
+    - name: allow tcp
+      ufw:
+       rule: allow
+       port: '80'
+       proto: tcp
+
+    - name: looping echo task
+      shell: "echo this is my item = {{ item }}"
+      loop: 
+        - apple
+        - orange
+      register: results
+    
+    - name: stdout
+      debug: 
+        msg: "stdout = {{ item.stdout }}"
+      loop: "{{ results['results'] }}"     

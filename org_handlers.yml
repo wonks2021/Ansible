@@ -1,0 +1,54 @@
+---
+- name: allowing ports
+  hosts: jenkins
+  tasks:
+    - name: allow ports
+      ufw:
+       state: enabled
+       policy: allow
+
+    - name: allow tcp
+      ufw:
+       rule: allow
+       port: '80'
+       proto: tcp
+
+    - name: creating user
+      user:
+       name: "{{ item.name }}"
+       uid: "{{ item.uid }}"
+       state: present
+      with_items:
+        - { name: 'a', uid: '3003'}
+        - { name: 'b', uid: '3001'}
+        - { name: 'c', uid: '3002'}
+        - { name: 'd', uid: '3000'}
+
+    - name: print uptime
+      shell: uptime
+      register: uptime_var
+      when: ansible_hostname == "ip-172-31-1-184"
+  
+    - name: file creation
+      copy:
+        content: 'This is not my world'
+        dest: /var/www/html/index.html
+      notify: nginx restarted
+
+    - name: pause for 1min
+      pause:
+        minutes: 1
+
+    - name: file creation 1
+      copy:
+        content: 'hello world'
+        dest: /var/www/html/index.html
+      notify: nginx restarted
+
+  handlers:
+    - name: nginx restarted
+      service:
+        name: nginx
+        state: restarted
+        enabled: true
+

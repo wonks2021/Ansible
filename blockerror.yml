@@ -1,0 +1,23 @@
+---
+- name: allowing ports
+  hosts: jenkins
+  tasks:
+    - name: error
+      block: 
+       - name: nano
+         apt: 
+           name: nano
+           state: present
+      rescue: 
+       - name: run error message
+         shell: /usr/local/error.sh
+         become: yes
+         register: cmd_result
+      #failed_when: " 'No package matching' in cmd_result.stdout "
+  
+       - name: debug 
+         debug:
+          msg: " no package found '{{ cmd_result }}' "
+      always: 
+       - name: run echo
+         shell: " echo i will run always"

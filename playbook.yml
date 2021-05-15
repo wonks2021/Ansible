@@ -1,0 +1,25 @@
+---
+- name: Configure important user consistently
+  hosts: jenkins
+  vars:
+   package1: "apache2"
+   package2: "wget"
+  tasks:
+   - name: newbie exists with UID 4000
+     user:
+         name: newbie
+         uid: 4000
+         state: present
+   
+   - name: apt-get update
+     apt: update_cache=true
+      become: true
+
+   - name: installing pckg
+     apt: pkg=apache2 state=installed updated_cached=true
+      become: true
+
+   - name: install wget
+     apt: pkg=wget state=installed updated_cached=true
+       become: true
+           

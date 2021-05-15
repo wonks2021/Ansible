@@ -1,0 +1,9 @@
+---
+- name: jinja
+  hosts: jenkins
+  tasks: 
+   - name: retrieving time
+     template: 
+      src: /home/ubuntu/jinja.j2
+      dest: /etc/motd
+   

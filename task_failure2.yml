@@ -1,0 +1,22 @@
+---
+- name: allowing ports
+  hosts: jenkins
+  tasks:
+    - name: allow ports
+      ufw:
+       state: enabled
+       policy: allow
+
+    - name: allow tcp
+      ufw:
+       rule: allow
+       port: '80'
+       proto: tcp
+
+    - name: error
+      shell: /usr/local/error.sh
+      become: yes
+      register: cmd_result
+      #failed_when: " 'No package matching' in cmd_result.stdout "
+      changed_when: true
+
